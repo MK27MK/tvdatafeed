@@ -193,6 +193,7 @@ class TvDatafeed:
         n_bars: int = 10,
         fut_contract: int = None,
         extended_session: bool = False,
+        settlement_as_close: bool = True,
     ) -> pd.DataFrame:
         """get historical data
 
@@ -263,6 +264,8 @@ class TvDatafeed:
                 + symbol
                 + '","adjustment":"splits","session":'
                 + ('"regular"' if not extended_session else '"extended"')
+                + ',"settlement-as-close":'
+                + ('false' if not settlement_as_close else 'true')                
                 + "}",
             ],
         )
