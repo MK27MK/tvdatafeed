@@ -194,6 +194,7 @@ class TvDatafeed:
         fut_contract: int = None,
         extended_session: bool = False,
         settlement_as_close: bool = True,
+        timezone: str = "exchange",
     ) -> pd.DataFrame:
         """get historical data
 
@@ -204,6 +205,9 @@ class TvDatafeed:
             n_bars (int, optional): no of bars to download, max 5000. Defaults to 10.
             fut_contract (int, optional): None for cash, 1 for continuous current contract in front, 2 for continuous next contract in front . Defaults to None.
             extended_session (bool, optional): regular session if False, extended session if True, Defaults to False.
+            settlement_as_close (bool): settlement price if True, else, False, Defaults to True. It only affects Daily 
+            or greater timeframes.
+            timezone (str): "exchange" by default.
 
         Returns:
             pd.Dataframe: dataframe with sohlcv as columns
@@ -265,7 +269,7 @@ class TvDatafeed:
                 + '","adjustment":"splits","session":'
                 + ('"regular"' if not extended_session else '"extended"')
                 + ',"settlement-as-close":'
-                + ('false' if not settlement_as_close else 'true')                
+                + ('false' if not settlement_as_close else 'true')
                 + "}",
             ],
         )
@@ -274,7 +278,7 @@ class TvDatafeed:
             [self.chart_session, "s1", "s1", "symbol_1", interval, n_bars],
         )
         self.__send_message("switch_timezone", [
-                            self.chart_session, "exchange"])
+                            self.chart_session, timezone])
 
         raw_data = ""
 
